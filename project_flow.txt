@@ -35,10 +35,59 @@
 21. Once do - dvc status
 22. git add - commit - push
 
+Source the data from S3
+create a remote S3 DVC bucket to storage
+    -   model.pkl
+    -   prprocessor.pkl
+    -   interim data
+    -   processed data
+
+both the s3 bucket can be same.
+
 23. Need to add S3 as remote storage - Create IAM User(keep cred) and S3 bucket
 24. pip install - dvc[s3] & awscli
 25. Checking/deleting dvc remote (optional) - [dvc remote list & dvc remote remove <name>] 
 26. Set aws cred - aws configure
 27. Add s3 as dvc remote storage - dvc remote add -d myremote s3://<bucket-name>
+
+dvc status
+dvc commit
+dvc push --> this will get pushed to local_s3 unless we configure a remote S3 
+
+
+28. Create new dir - flask_app | Inside that, add rest of the files and dir
+29. pip install flask and run the app (dvc push - to push data to S3)
+
+30. pip freeze > requirements.txt
+31. Add .github/workflows/ci.yaml file
+
+32. Create key token on Dagshub for auth: Go to dagshub repo > Your settings > Tokens > Generate new token
+    >> Please make sure to save token << >> capstone_test: 54b1d67648a9b1267ef906fsdfsd8b292f779f0<<
+    >> Add this auth token to github secret&var and update on ci file
+
+
+31. Add dir "tests"&"scripts" and files within. This will contain our test related scripts for CI.
+
+>>>>> Moving to Docker <<<<<
+32. pip install pipreqs
+33. cd flask_app & do "pipreqs . --force"
+34. Add dockerfile and start docker-desktop in background
+    Also before proceeding make sure: [switch the mlflow server setup to param version, change cmd on dockerfile]
+35. go to root dir and: "docker build -t capstone-app:latest ."
+36. Try running the image: "docker run -p 8888:5000 capstone-app:latest"
+    - This run will give 'OSError: capstone_test environment variable is not set'...obviously
+    - alternate: docker run -p 8888:5000 -e CAPSTONE_TEST=54b1d67648a9b1267ef906fsdfsd8b292f779f0 capstone-app:latest
+    - docker push youruser/capstone-app:latest (optional)
+    - optional: try to delete image locally and pull it from dockerhub and run (optional)
+
+37. Setup aws services for below secrets and variables:
+	AWS_ACCESS_KEY_ID
+	AWS_SECRET_ACCESS_KEY
+	AWS_REGION
+	ECR_REPOSITORY (capstone-proj)
+    AWS_ACCOUNT_ID
+   (Also add this permission to the IAM user: AmazonEC2ContainerRegistryFullAccess)
+
+38. Execute CICD pipeline till the stage where we build and push image to ECR.
 
 
