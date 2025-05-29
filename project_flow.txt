@@ -15,11 +15,15 @@
 11. pip install dagshub & mlflow
 
 12. Run the exp notebooks
+----> <<<<tried with word2vec and Bert only with Logistic regression>>>
 13. git add - commit - push
 
 14. dvc init
 15. create a local folder as "local_s3" (temporary work)
 16. on terminal - "dvc remote add -d mylocal local_s3"
+
+
+#Day 22:
 
 17. Add code to below files/folders inside src dir:
     - logger

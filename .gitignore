@@ -180,3 +180,7 @@ local_s3/
 
 models/
 logs/
+data1/
+data_s3/
+notebooks/movie.csv
+

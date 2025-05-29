@@ -69,26 +69,26 @@ def normalize_text(text):
 
 # Below code block is for local use
 # -------------------------------------------------------------------------------------
-# mlflow.set_tracking_uri('https://dagshub.com/souvikpaul425/yt_mlops_capstone_project.mlflow')
-# dagshub.init(repo_owner='souvikpaul425', repo_name='yt_mlops_capstone_project', mlflow=True)
+mlflow.set_tracking_uri('https://dagshub.com/souvikpaul425/yt_mlops_capstone_project.mlflow')
+dagshub.init(repo_owner='souvikpaul425', repo_name='yt_mlops_capstone_project', mlflow=True)
 # -------------------------------------------------------------------------------------
 
 # Below code block is for production use
 # -------------------------------------------------------------------------------------
 # Set up DagsHub credentials for MLflow tracking
-dagshub_token = os.getenv("CAPSTONE_TEST")
-if not dagshub_token:
-    raise EnvironmentError("CAPSTONE_TEST environment variable is not set")
+# dagshub_token = os.getenv("CAPSTONE_TEST")
+# if not dagshub_token:
+#     raise EnvironmentError("CAPSTONE_TEST environment variable is not set")
 
-os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
-os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
+# os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
+# os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
 
-dagshub_url = "https://dagshub.com"
-repo_owner = "souvikpaul425"
-repo_name = "yt_mlops_capstone_project"
+# dagshub_url = "https://dagshub.com"
+# repo_owner = "souvikpaul425"
+# repo_name = "yt_mlops_capstone_project"
 
-# Set up MLflow tracking URI
-mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
+# # Set up MLflow tracking URI
+# mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
 # -------------------------------------------------------------------------------------
 
 
@@ -113,10 +113,10 @@ PREDICTION_COUNT = Counter(
 
 # ------------------------------------------------------------------------------------------
 # Model and vectorizer setup
-model_name = "Logistric Regression"
+model_name = "my_model_v2"
 def get_latest_model_version(model_name):
     client = mlflow.MlflowClient()
-    latest_version = client.get_latest_versions(model_name, stages=["Production"])
+    latest_version = client.get_latest_versions(model_name, stages=["Staging"])
     if not latest_version:
         latest_version = client.get_latest_versions(model_name, stages=["None"])
     return latest_version[0].version if latest_version else None

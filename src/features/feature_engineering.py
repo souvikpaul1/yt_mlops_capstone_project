@@ -47,10 +47,10 @@ def apply_bow(train_data: pd.DataFrame, test_data: pd.DataFrame, max_features: i
         logging.info("Applying BOW...")
         vectorizer = CountVectorizer(max_features=max_features)
 
-        X_train = train_data['review'].values
-        y_train = train_data['sentiment'].values
-        X_test = test_data['review'].values
-        y_test = test_data['sentiment'].values
+        X_train = train_data['text'].values
+        y_train = train_data['label'].values
+        X_test = test_data['text'].values
+        y_test = test_data['label'].values
 
         X_train_bow = vectorizer.fit_transform(X_train)
         X_test_bow = vectorizer.transform(X_test)
@@ -85,13 +85,13 @@ def main():
         max_features = params['feature_engineering']['max_features']
         # max_features = 20
 
-        train_data = load_data('./data/interim/train_processed.csv')
-        test_data = load_data('./data/interim/test_processed.csv')
+        train_data = load_data('./data_s3/interim/train_processed.csv')
+        test_data = load_data('./data_s3/interim/test_processed.csv')
 
         train_df, test_df = apply_bow(train_data, test_data, max_features)
 
-        save_data(train_df, os.path.join("./data", "processed", "train_bow.csv"))
-        save_data(test_df, os.path.join("./data", "processed", "test_bow.csv"))
+        save_data(train_df, os.path.join("./data_s3", "processed", "train_bow.csv"))
+        save_data(test_df, os.path.join("./data_s3", "processed", "test_bow.csv"))
     except Exception as e:
         logging.error('Failed to complete the feature engineering process: %s', e)
         print(f"Error: {e}")

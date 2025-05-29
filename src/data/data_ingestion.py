@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 import yaml
 import logging
 from src.logger import logging
-#from src.connections import s3_connection
+from src.connections import s3_connection
 
 
 def load_params(params_path: str) -> dict:
@@ -48,8 +48,9 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     try:
         # df.drop(columns=['tweet_id'], inplace=True)
         logging.info("pre-processing...")
-        final_df = df[df['sentiment'].isin(['positive', 'negative'])]
-        final_df['sentiment'] = final_df['sentiment'].replace({'positive': 1, 'negative': 0})
+        #final_df = df[df['sentiment'].isin(['positive', 'negative'])]
+        #final = df_df['sentiment'] = final_df['sentiment'].replace({'positive': 1, 'negative': 0})
+        final_df = df
         logging.info('Data preprocessing completed')
         return final_df
     except KeyError as e:
@@ -78,15 +79,15 @@ def main():
         #test_size = 0.2
         
         #df = load_data(data_url='https://raw.githubusercontent.com/vikashishere/Datasets/refs/heads/main/data.csv')
-        df = load_data(data_url='./notebooks/data.csv')
+        df = load_data(data_url='./notebooks/movie.csv')
         # s3 = s3_connection.s3_operations("bucket-name", "accesskey", "secretkey")
-        # df = s3.fetch_file_from_s3("data.csv")
+        # df = s3.fetch_file_from_s3("movie.csv")
 
 
 
         final_df = preprocess_data(df)
         train_data, test_data = train_test_split(final_df, test_size=test_size, random_state=42)
-        save_data(train_data, test_data, data_path='./data')
+        save_data(train_data, test_data, data_path='./data_s3')
     except Exception as e:
         logging.error('Failed to complete the data ingestion process: %s', e)
         print(f"Error: {e}")

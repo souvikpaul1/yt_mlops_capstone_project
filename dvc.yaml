@@ -8,31 +8,31 @@ stages:
     params:
     - data_ingestion.test_size
     outs:
-    - data/raw
+    - data_s3/raw
 
   data_preprocessing:
     cmd: python src/data/data_preprocessing.py
     deps:
-    - data/raw
+    - data_s3/raw
     - src/data/data_preprocessing.py
     outs:
-    - data/interim
+    - data_s3/interim
 
   feature_engineering:
     cmd: python src/features/feature_engineering.py
     deps:
-    - data/interim
+    - data_s3/interim
     - src/features/feature_engineering.py
     params:
     - feature_engineering.max_features
     outs:
-    - data/processed
+    - data_s3/processed
     - models/vectorizer.pkl
 
   model_building:
     cmd: python src/model/model_building.py
     deps:
-    - data/processed
+    - data_s3/processed
     - src/model/model_building.py
     outs:
     - models/model.pkl

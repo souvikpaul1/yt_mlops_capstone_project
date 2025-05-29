@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pickle
 import json
-from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_auc_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_auc_score,f1_score
 import logging
 import mlflow
 import mlflow.sklearn
@@ -16,19 +16,19 @@ from src.logger import logging
 # Below code block is for production use
 # -------------------------------------------------------------------------------------
 #Set up DagsHub credentials for MLflow tracking
-dagshub_token = os.getenv("CAPSTONE_TEST")
-if not dagshub_token:
-    raise EnvironmentError("CAPSTONE_TEST environment variable is not set")
+# dagshub_token = os.getenv("CAPSTONE_TEST")
+# if not dagshub_token:
+#     raise EnvironmentError("CAPSTONE_TEST environment variable is not set")
 
-os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
-os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
+# os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
+# os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
 
-dagshub_url = "https://dagshub.com"
-repo_owner = "souvikpaul425"
-repo_name = "yt_mlops_capstone_project"
+# dagshub_url = "https://dagshub.com"
+# repo_owner = "souvikpaul425"
+# repo_name = "yt_mlops_capstone_project"
 
-# Set up MLflow tracking URI
-mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
+# # Set up MLflow tracking URI
+# mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
 
 # -------------------------------------------------------------------------------------
 
@@ -36,8 +36,8 @@ mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
 
 # Below code block is for local use
 # -------------------------------------------------------------------------------------
-# "mlflow_tracking_uri": "https://dagshub.com/souvikpaul425/yt_mlops_capstone_project.mlflow/",
-# dagshub.init(repo_owner='souvikpaul425', repo_name='yt_mlops_capstone_project', mlflow=True)
+mlflow.set_tracking_uri("https://dagshub.com/souvikpaul425/yt_mlops_capstone_project.mlflow/")
+dagshub.init(repo_owner='souvikpaul425', repo_name='yt_mlops_capstone_project', mlflow=True)
 
 
 
@@ -81,12 +81,14 @@ def evaluate_model(clf, X_test: np.ndarray, y_test: np.ndarray) -> dict:
         precision = precision_score(y_test, y_pred)
         recall = recall_score(y_test, y_pred)
         auc = roc_auc_score(y_test, y_pred_proba)
+        f1 = f1_score(y_test, y_pred)
 
         metrics_dict = {
             'accuracy': accuracy,
             'precision': precision,
             'recall': recall,
-            'auc': auc
+            'auc': auc,
+            'f1':f1
         }
         logging.info('Model evaluation metrics calculated')
         return metrics_dict
@@ -116,11 +118,11 @@ def save_model_info(run_id: str, model_path: str, file_path: str) -> None:
         raise
 
 def main():
-    mlflow.set_experiment("my-dvc-pipeline")
+    mlflow.set_experiment("my-dvc-pipeline-v2")
     with mlflow.start_run() as run:  # Start an MLflow run
         try:
             clf = load_model('./models/model.pkl')
-            test_data = load_data('./data/processed/test_bow.csv')
+            test_data = load_data('./data_s3/processed/test_bow.csv')
             
             X_test = test_data.iloc[:, :-1].values
             y_test = test_data.iloc[:, -1].values

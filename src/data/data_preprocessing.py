@@ -64,16 +64,16 @@ def preprocess_dataframe(df, col='text'):
 def main():
     try:
         # Fetch the data from data/raw
-        train_data = pd.read_csv('./data/raw/train.csv')
-        test_data = pd.read_csv('./data/raw/test.csv')
+        train_data = pd.read_csv('./data_s3/raw/train.csv')
+        test_data = pd.read_csv('./data_s3/raw/test.csv')
         logging.info('data loaded properly')
 
         # Transform the data
-        train_processed_data = preprocess_dataframe(train_data, 'review')
-        test_processed_data = preprocess_dataframe(test_data, 'review')
+        train_processed_data = preprocess_dataframe(train_data, 'text')
+        test_processed_data = preprocess_dataframe(test_data, 'text')
 
         # Store the data inside data/processed
-        data_path = os.path.join("./data", "interim")
+        data_path = os.path.join("./data_s3", "interim")
         os.makedirs(data_path, exist_ok=True)
         
         train_processed_data.to_csv(os.path.join(data_path, "train_processed.csv"), index=False)

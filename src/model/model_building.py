@@ -46,7 +46,7 @@ def save_model(model, file_path: str) -> None:
 def main():
     try:
 
-        train_data = load_data('./data/processed/train_bow.csv')
+        train_data = load_data('./data_s3/processed/train_bow.csv')
         X_train = train_data.iloc[:, :-1].values
         y_train = train_data.iloc[:, -1].values
 
