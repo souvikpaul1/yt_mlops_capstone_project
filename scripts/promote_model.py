@@ -21,7 +21,7 @@ def promote_model():
 
     client = mlflow.MlflowClient()
 
-    model_name = "Logistric Regression"
+    model_name = "my_model_v2"
     # Get the latest version in staging
     latest_version_staging = client.get_latest_versions(model_name, stages=["Staging"])[0].version
 
