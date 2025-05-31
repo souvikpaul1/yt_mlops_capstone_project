@@ -116,7 +116,7 @@ dvc push --> this will get pushed to local_s3 unless we configure a remote S3
         
 
 32. Create key token on Dagshub for auth: Go to dagshub repo > Your settings > Tokens > Generate new token
-    >> Please make sure to save token << >> capstone_test: >> <<
+    >> Please make sure to save token << >> capstone_test: << >>
     >> Add this auth token to github secret&var and update on ci file
 
 
@@ -136,7 +136,7 @@ dvc push --> this will get pushed to local_s3 unless we configure a remote S3
 35. go to root dir and: "docker build -t capstone-app:latest ."
 36. Try running the image: "docker run -p 8888:5000 capstone-app:latest"
     - This run will give 'OSError: capstone_test environment variable is not set'...obviously
-    - alternate: docker run -p 8888:5000 -e CAPSTONE_TEST=e7fd332d7d5aecee0fcdf6a56a54d90a30d88024 capstone-app:latest
+    - alternate: docker run -p 8888:5000 -e CAPSTONE_TEST=<< >> capstone-app:latest
     - docker push youruser/capstone-app:latest (optional)
     - optional: try to delete image locally and pull it from dockerhub and run (optional)
 
@@ -222,10 +222,6 @@ kubectl get svc flask-app-service
 curl http://a6bf6255d5f61470c9782b8955c98271-1409247973.us-east-1.elb.amazonaws.com:5000
 
 
-
-
-
-
 >>>>>>>>>> Prometheus Server Setup <<<<<<<<<<
 
 50. Launch an Ubuntu EC2 Instance for Prometheus: t3.medium,  20GB of disk space (general-purpose SSD), Security Group: Allow inbound access on ports: 9090 for Prometheus Web UI, 22 for SSH access
@@ -267,8 +263,6 @@ This should return the full path to the prometheus binary, such as /usr/local/bi
 
 57. Run Prometheus with the config file:
 /usr/local/bin/prometheus --config.file=/etc/prometheus/prometheus.yml
-
-
 
 
 >>>>>>>>>> Grafana Server Setup <<<<<<<<<<
