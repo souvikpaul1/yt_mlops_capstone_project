@@ -1,9 +1,16 @@
+ML project Background:
+
+The IMDB movie review dataset is a widely used benchmark in natural language processing (NLP) for binary sentiment classification.
+Dataset having almost 40000 reviews.
+
+Create a sentiment analysis Classification Model and Productionalize it.
+
 -------------------------Setting up project structure---------------------------
 
-1. Create repo, clone it in local
+1. Create repo (yt_mlops_capstone_project), clone it in local
 2. Create a virtual environment named 'atlas' - conda create -n atlas python=3.10
 3. Activate the virtual environment - conda activate atlas
-4. pip install cookiecutter
+4. pip install cookiecutter ( This provide a  Project structure to the DS projects)
 5. cookiecutter -c v1 https://github.com/drivendata/cookiecutter-data-science
 6. Rename src.models -> src.model
 7. git add - commit - push
@@ -15,7 +22,38 @@
 11. pip install dagshub & mlflow
 
 12. Run the exp notebooks
-----> <<<<tried with word2vec and Bert only with Logistic regression>>>
+
+EXP1: Count Vectorizer + Logistic Regression ( to get a baseline Model)
+
+Accuracy: 0.66
+Precision: 0.6666666666666666
+INFO - Recall: 0.64
+F1 Score: 0.6530612244897959
+
+EXP2: Tried 2 vectorizer --> BOW and TFIDF
+Algorithms:
+
+'LogisticRegression'
+'MultinomialNB'
+'XGBoost'
+'RandomForest'
+'GradientBoosting'
+
+Best Model --> TF_IDF + Logistic Regression
+
+EXP3:
+Hyperparameter tuning TF_IDF + Logistic Regression
+
+EXP4:
+Vectorizers --> Word2vec and SentenceBERT
+Algorithms --> LogisticRegression
+
+Conclusion:
+Best Model: TFIDF + LogisticRegression
+Increased max_feature = 10000
+Pushed ROC-AUC to 80%
+Added F1 score since it is a balance dataset
+
 13. git add - commit - push
 
 14. dvc init
@@ -33,18 +71,25 @@
     - model_building.py
     - model_evaluation.py
     - register_model.py
-18. add file - dvc.yaml (till model evaluation.metrics)
+
+18. add file - dvc.yaml (till model model_registration)
 19. add file - params.yaml
-20. DVC pipeline is ready to run - dvc repro
+20. Local Mode run: DVC pipeline is ready to run - dvc repro
 21. Once do - dvc status
 22. git add - commit - push
 
 Source the data from S3
+    - Csv file
+
 create a remote S3 DVC bucket to storage
     -   model.pkl
     -   prprocessor.pkl
+    -   Raw Data
+            - Train Test split
     -   interim data
+            - Train Test split
     -   processed data
+            - Train Test split
 
 both the s3 bucket can be same.
 
@@ -61,16 +106,27 @@ dvc push --> this will get pushed to local_s3 unless we configure a remote S3
 
 28. Create new dir - flask_app | Inside that, add rest of the files and dir
 29. pip install flask and run the app (dvc push - to push data to S3)
+        - Tested with Fast API app also
+        - Model serving will happen from the model in production
 
 30. pip freeze > requirements.txt
 31. Add .github/workflows/ci.yaml file
+        - break the ci.yaml into multiple Jobs.
+        - ci.yaml with only execute when merged to develop/branch
+        
 
 32. Create key token on Dagshub for auth: Go to dagshub repo > Your settings > Tokens > Generate new token
-    >> Please make sure to save token << >> capstone_test: 54b1d67648a9b1267ef906fsdfsd8b292f779f0<<
+    >> Please make sure to save token << >> capstone_test: >> <<
     >> Add this auth token to github secret&var and update on ci file
 
 
 31. Add dir "tests"&"scripts" and files within. This will contain our test related scripts for CI.
+    test:
+        - test_model.py ( test model if it is crossing previous model)
+    Scripts:
+        - Promote_model.py ( this will promote staging model to production in model registry if it betters the previous model)
+    test:
+        - test_flask_app.py ( test the flask app that it should serve the new model)
 
 >>>>> Moving to Docker <<<<<
 32. pip install pipreqs

@@ -39,7 +39,7 @@ jobs:
           name: model-artifacts
           path: |
             models/
-            data/processed/
+            data_s3/processed/
 
   testing-and-serve:
     runs-on: ubuntu-latest
